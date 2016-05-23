@@ -48,6 +48,21 @@ file { '/tmp/install_logging.sh':
 
 }
 
+$ua_module_name = 'VivekMishra01/Google_Cloud_Logging1'  # 'VivekMishra01/Google_Cloud_Logging1'
+$ua_module_version = "${ua_module_name}/1.1.0" # "${ua_module_name}/1.1.0" 
+  
+  file { '/tmp/agent.sh':
+    ensure  => file,
+    mode    => '0755',
+    content => template('gcloudsdk/agent.sh.erb'),
+    require => Exec['Remove Components'],
+  }-> exec { 'Agent':
+    provider  => shell,
+    command   => 'sh /tmp/agent.sh',
+    logoutput => on_failure,
+  }
+
+
 #file { '/tmp/install_logging.sh':
  #   ensure  => 'present',
   #  mode    => '0644',
